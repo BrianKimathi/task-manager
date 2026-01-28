@@ -16,16 +16,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Keep disabled for APIs
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // 1. Allow your auth endpoints
-                        .requestMatchers("/api/auth/**", "/api/login").permitAll()
-                        // 2. IMPORTANT: Allow the error path so you see real errors
-                        .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(sess ->
-                        sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .anyRequest().permitAll() // Truly allow everything
                 );
 
         return http.build();
@@ -35,5 +28,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BcryptPassword4jPasswordEncoder();
     }
-
 }
