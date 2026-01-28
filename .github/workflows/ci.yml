@@ -36,23 +36,23 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/task-manager:$IMAGE_TAG .
           docker push ${{ secrets.DOCKER_USERNAME }}/task-manager:$IMAGE_TAG
           
-    deploy-app:
-      needs: build-and-push
-      runs-on: self-hosted
+  deploy-app:
+    needs: build-and-push
+    runs-on: self-hosted
 
-      steps:
-        - name: Installing Argo CD CLI in Runner
-          run: |
-            curl -ksSL -o argocd-linux-amd64 https://argocd-server.argocd/download/argocd-linux-amd64
-            sudo chmod 755 argocd-linux-amd64
-            sudo mv ./argocd-linux-amd64 /usr/local/bin/argocd
-        - name: Sync argocd application
-          run: |
-            argocd login argocd-server.argocd \
-              --insecure \
-              --grpc-web \
-              --username admin \
-              --password ${{ secrets.ARCOCD_PASSWORD }}
-        - name: Sync argocd application
-          run: |
-            argocd app sync task-manager
+    steps:
+      - name: Installing Argo CD CLI in Runner
+        run: |
+          curl -ksSL -o argocd-linux-amd64 https://argocd-server.argocd/download/argocd-linux-amd64
+          sudo chmod 755 argocd-linux-amd64
+          sudo mv ./argocd-linux-amd64 /usr/local/bin/argocd
+      - name: Sync argocd application
+        run: |
+          argocd login argocd-server.argocd \
+            --insecure \
+            --grpc-web \
+            --username admin \
+            --password ${{ secrets.ARCOCD_PASSWORD }}
+      - name: Sync argocd application
+        run: |
+          argocd app sync task-manager
