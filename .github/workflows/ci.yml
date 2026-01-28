@@ -53,6 +53,12 @@ jobs:
             --grpc-web \
             --username admin \
             --password ${{ secrets.ARCOCD_PASSWORD }}
+      - name: Update and Sync Argo CD
+        run:  |
+          argocd app set task-manager --parameter spec.template.spec.containers[0].image=briankimathi/task-manager:${GITHUB_SHA::7}
+          argocd app sync task-manager
+          
+
       - name: Sync argocd application
         run: |
           argocd app sync task-manager
