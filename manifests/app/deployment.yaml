@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: briankimathi/task-manager:2baf4142b38e2eb689c534d6dfea1187d3b79747
+          image: briankimathi/task-manager:2aac11ffa88ed239c8c2446ddffdf627f218f57f
           ports:
             - containerPort: 8080
           envFrom:
