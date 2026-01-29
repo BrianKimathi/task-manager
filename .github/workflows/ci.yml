@@ -62,19 +62,14 @@ jobs:
           curl -ksSL -o argocd-linux-amd64 https://argocd-server.argocd/download/argocd-linux-amd64
           sudo chmod 755 argocd-linux-amd64
           sudo mv ./argocd-linux-amd64 /usr/local/bin/argocd
-      - name: Sync argocd application
+
+      - name: Login via argocd cli
         run: |
           argocd login argocd-server.argocd \
             --insecure \
             --grpc-web \
             --username admin \
-            --password ${{ secrets.ARCOCD_PASSWORD }}
-      - name: Update Image Tag and Sync
-        run: |
-          IMAGE_TAG=${GITHUB_SHA::7}
-          # Target the container named 'app'
-          argocd app set task-manager --image app=briankimathi/task-manager:$IMAGE_TAG
-          argocd app sync task-manager
+            --password ${{ secrets.ARCOCD_PASSWORD }}]
           
 
       - name: Sync argocd application
