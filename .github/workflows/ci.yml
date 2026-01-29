@@ -66,9 +66,10 @@ jobs:
       - name: Login via argocd cli
         run: |
           argocd login 98.86.178.34:30090 \
-            --auth-token "${{ secrets.ARGOCD_AUTH_TOKEN }}" \
             --insecure \
-            --grpc-web
+            --grpc-web \
+            --username admin \
+            --password ${{ secrets.ARGOCD_PASSWORD }}
 
       - name: Sync argocd application
         run: |
