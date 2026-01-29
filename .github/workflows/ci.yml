@@ -42,7 +42,7 @@ jobs:
       - name: Updating image tag inside manifest files
         run: |
           pip install yq
-          yq -Yi '.spec.template.spec.containers[0].image = "briankimathi/task-manager:${{ github.sha }}"' ./manifests/app/deployment.yaml
+          yq -Yi '.spec.template.spec.containers[0].image = "briankimathi/task-manager:'${GITHUB_SHA}'"' ./manifests/app/deployment.yaml
 
       - name: Commit and Push the code
         run: |
