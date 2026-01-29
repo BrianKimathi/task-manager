@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public String signIn() {
-        return "Login implementation coming soon!";
+        return "Api works perfectly:";
     }
 
 }
