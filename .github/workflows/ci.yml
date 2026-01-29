@@ -59,18 +59,39 @@ jobs:
     steps:
       - name: Installing Argo CD CLI in Runner
         run: |
-          curl -ksSL -o argocd-linux-amd64 https://argocd-server.argocd/download/argocd-linux-amd64
+          echo "Checking network connectivity to Argo CD Server..."
+          # This checks if the runner can even see the Argo CD service
+          ping -c 2 argocd-server.argocd.svc.cluster.local || echo "DNS lookup failed, but proceeding with download..."
+          
+          echo "Downloading Argo CD CLI..."
+          # Using the full DNS path for the download as well
+          curl -ksSL -o argocd-linux-amd64 https://argocd-server.argocd.svc.cluster.local/download/argocd-linux-amd64
+          
           sudo chmod 755 argocd-linux-amd64
           sudo mv ./argocd-linux-amd64 /usr/local/bin/argocd
+          echo "Argo CD CLI installed successfully: $(argocd version --client --short)"
 
       - name: Login via argocd cli
+        env:
+          ARGOCD_PASS: ${{ secrets.ARGOCD_PASSWORD }}
         run: |
-          argocd login argocd-server.argocd \
+          echo "Attempting login to Argo CD..."
+          # Check if secret is empty without printing the actual value
+          if [ -z "$ARGOCD_PASS" ]; then
+            echo "ERROR: ARGOCD_PASSWORD secret is empty! Check your GitHub Secrets."
+            exit 1
+          fi
+          
+          argocd login argocd-server.argocd.svc.cluster.local \
             --insecure \
             --grpc-web \
             --username admin \
-            --password ${{ secrets.ARGOCD_PASSWORD }}
+            --password "$ARGOCD_PASS"
+          echo "Login step completed."
 
       - name: Sync argocd application
         run: |
+          echo "Starting sync for application: task-manager"
           argocd app sync task-manager
+          echo "Sync command sent. Checking status..."
+          argocd app get task-manager
