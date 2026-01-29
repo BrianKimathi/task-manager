@@ -72,7 +72,5 @@ jobs:
             --password ${{ secrets.ARGOCD_PASSWORD }}
 
       - name: Sync argocd application
-
-      - name: Sync argocd application
         run: |
           argocd app sync task-manager
