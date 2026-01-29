@@ -64,12 +64,14 @@ jobs:
           sudo mv ./argocd-linux-amd64 /usr/local/bin/argocd
 
       - name: Login via argocd cli
+        env:
+          ARGOCD_PASS: ${{ secrets.ARGOCD_PASSWORD }}
         run: |
           argocd login 98.86.178.34:30090 \
             --insecure \
             --grpc-web \
             --username admin \
-            --password ${{ secrets.ARGOCD_PASSWORD }}
+            --password "$ARGOCD_PASS"
 
       - name: Sync argocd application
         run: |
