@@ -87,6 +87,17 @@ public class AuthService {
             );
         }
 
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            return new ResponseDto(
+                    "failed",
+                    "Invalid Credentials!",
+                    null
+            );
+        }
+
         // login user and generate jwt
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -102,9 +113,6 @@ public class AuthService {
         );
 
         String jwt = jwtUtil.generateToken(userDetails);
-
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found!"));
 
         return new ResponseDto(
                 "success",
