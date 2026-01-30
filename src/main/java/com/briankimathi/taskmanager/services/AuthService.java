@@ -40,7 +40,7 @@ public class AuthService {
     }
 
     public ResponseDto<Void> register(RegisterRequest registerRequest) {
-        if (registerRequest.getEmail() == null || registerRequest.getUserName() == null || registerRequest.getPassword() == null) {
+        if (registerRequest.getEmail() == null || registerRequest.getUsername() == null || registerRequest.getPassword() == null) {
             return new ResponseDto(
                     "failed",
                     "All fields required",
@@ -57,7 +57,7 @@ public class AuthService {
         }
 
         User user = new User();
-        user.setUsername(registerRequest.getUserName());
+        user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
