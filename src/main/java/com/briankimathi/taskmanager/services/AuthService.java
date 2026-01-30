@@ -39,24 +39,20 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    public ResponseEntity<ResponseDto<Void>> register(RegisterRequest registerRequest) {
+    public ResponseDto<Void> register(RegisterRequest registerRequest) {
         if (registerRequest.getEmail() == null || registerRequest.getUserName() == null || registerRequest.getPassword() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseDto(
-                            "failed",
-                            "All fields required",
-                            null
-                    )
+            return new ResponseDto(
+                    "failed",
+                    "All fields required",
+                    null
             );
         }
 
         if(userRepository.existsByEmail(registerRequest.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseDto(
-                            "failed",
-                            "User with email already exists",
-                            null
-                    )
+            return new ResponseDto(
+                    "failed",
+                    "User with email already exists",
+                    null
             );
         }
 
@@ -67,14 +63,11 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ResponseDto(
-                        "success",
-                        "User registered successfully",
-                        null
-                )
+        return new ResponseDto(
+                "success",
+                "User registered successfully",
+                null
         );
-
     }
 
     public ResponseDto<Void> login(LoginRequest loginRequest) {
