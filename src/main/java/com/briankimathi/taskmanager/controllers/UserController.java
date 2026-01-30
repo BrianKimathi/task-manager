@@ -24,14 +24,14 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    private ResponseEntity<ResponseDto<Void>> signUp(RegisterRequest registerRequest) {
+    public ResponseEntity<ResponseDto<Void>> signUp(RegisterRequest registerRequest) {
         ResponseDto<Void> responseDto = authService.register(registerRequest);
 
         return ResponseEntity.ok(responseDto);
     }
 
     @PostMapping("/signin")
-    private ResponseEntity<ResponseDto<Void>> login(LoginRequest loginRequest) {
+    public ResponseEntity<ResponseDto<Void>> login(LoginRequest loginRequest) {
         ResponseDto<Void> responseDto = authService.login(loginRequest);
         return ResponseEntity.ok(responseDto);
     }
