@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: task-manager
+
   datasource:
     url: jdbc:postgresql://postgres.database.svc.cluster.local:5432/taskmanager
     username: postgres
@@ -10,6 +13,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret: d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f
+  expiration: 604800000
+
+logging:
+  level:
+    org.springframework.security: DEBUG
 
 server:
   port: 8080
