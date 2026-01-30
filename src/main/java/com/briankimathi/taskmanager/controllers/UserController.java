@@ -6,6 +6,7 @@ import com.briankimathi.taskmanager.dto.RegisterRequest;
 import com.briankimathi.taskmanager.dto.ResponseDto;
 import com.briankimathi.taskmanager.repository.UserRepository;
 import com.briankimathi.taskmanager.services.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,7 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<ResponseDto<Void>> login(@RequestBody LoginRequest loginRequest) {
         ResponseDto<Void> responseDto = authService.login(loginRequest);
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
 }
