@@ -8,6 +8,7 @@ import com.briankimathi.taskmanager.repository.UserRepository;
 import com.briankimathi.taskmanager.services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,14 +25,14 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDto<Void>> signUp(RegisterRequest registerRequest) {
+    public ResponseEntity<ResponseDto<Void>> signUp(@RequestBody RegisterRequest registerRequest) {
         ResponseDto<Void> responseDto = authService.register(registerRequest);
 
         return ResponseEntity.ok(responseDto);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<ResponseDto<Void>> login(LoginRequest loginRequest) {
+    public ResponseEntity<ResponseDto<Void>> login(@RequestBody LoginRequest loginRequest) {
         ResponseDto<Void> responseDto = authService.login(loginRequest);
         return ResponseEntity.ok(responseDto);
     }
