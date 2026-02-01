@@ -116,4 +116,32 @@ public class TaskService {
 
     }
 
+
+    public ResponseDto<Void> deleteTask(Long id, Authentication authentication) {
+        String email = authentication.getName();
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if(!user.isPresent()) {
+            return new ResponseDto(
+                    "failed",
+                    "User not found!",
+                    null
+            );
+        }
+
+        Task task = taskRepository.findByIdAndUserEmail(id, email).orElseThrow(
+                () -> new RuntimeException("Task not found")
+        );
+
+        taskRepository.delete(task);
+
+        return new ResponseDto(
+                "success",
+                "Task deleted successfully",
+                null
+        );
+
+    }
+
 }
