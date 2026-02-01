@@ -1,10 +1,7 @@
 package com.briankimathi.taskmanager.services;
 
 
-import com.briankimathi.taskmanager.dto.LoginRequest;
-import com.briankimathi.taskmanager.dto.LoginResponse;
-import com.briankimathi.taskmanager.dto.RegisterRequest;
-import com.briankimathi.taskmanager.dto.ResponseDto;
+import com.briankimathi.taskmanager.dto.*;
 import com.briankimathi.taskmanager.models.User;
 import com.briankimathi.taskmanager.repository.UserRepository;
 import com.briankimathi.taskmanager.security.JwtUtil;
@@ -12,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -123,6 +121,59 @@ public class AuthService {
                         jwt
                 )
         );
+
+    }
+
+    public ResponseDto<Void> updateProfile(UpdateProfileRequest request, Authentication authentication) {
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        boolean isUsernamePresent =
+                request.getUsername() != null && !request.getUsername().isBlank();
+
+        boolean isPasswordChangeRequested =
+                request.getOldPassword() != null && !request.getOldPassword().isBlank()
+                        && request.getNewPassword() != null && !request.getNewPassword().isBlank();
+
+        if(!isUsernamePresent && !isPasswordChangeRequested) {
+            return new ResponseDto(
+                    "failed",
+                    "At least one field must be provided",
+                    null
+            );
+        }
+
+        if(isUsernamePresent) {
+            user.setUsername(request.getUsername());
+        }
+
+
+
+        if(isPasswordChangeRequested) {
+            if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+                return new ResponseDto(
+                        "failed",
+                        "Old password is incorrect",
+                        null
+                );
+            }
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        }
+
+        userRepository.save(user);
+
+        UpdateProfileResponse response = new UpdateProfileResponse();
+        response.setUsername(user.getUsername());
+        response.setEmail(email);
+
+        return new ResponseDto(
+                "success",
+                "Profile updated successfully",
+                response
+        );
+
 
     }
 
