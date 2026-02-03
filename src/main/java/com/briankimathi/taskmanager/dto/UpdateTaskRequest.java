@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter @Setter
 public class UpdateTaskRequest {
-    private Long id;
     private String title;
     private String description;
 }

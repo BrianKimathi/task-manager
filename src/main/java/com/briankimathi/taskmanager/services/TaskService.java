@@ -79,7 +79,7 @@ public class TaskService {
 
     }
 
-    public ResponseDto<Void> updateTask(UpdateTaskRequest updateTaskRequest, Authentication authentication) {
+    public ResponseDto<Void> updateTask(Long id, UpdateTaskRequest updateTaskRequest, Authentication authentication) {
         String email = authentication.getName();
         Optional<User> user = userRepository.findByEmail(email);
 
@@ -91,7 +91,7 @@ public class TaskService {
             );
         }
 
-        Task task = taskRepository.findByIdAndUserEmail(updateTaskRequest.getId(), email).orElseThrow(
+        Task task = taskRepository.findByIdAndUserEmail(id, email).orElseThrow(
                 () -> new RuntimeException("Task not found")
         );
 

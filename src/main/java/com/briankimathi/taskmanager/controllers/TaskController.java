@@ -35,12 +35,13 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseDto<Void>> updateTask(
+            @PathVariable Long id,
             @RequestBody UpdateTaskRequest taskRequest,
             Authentication authentication
     ) {
-        ResponseDto<Void> responseDto = taskService.updateTask(taskRequest, authentication);
+        ResponseDto<Void> responseDto = taskService.updateTask(id, taskRequest, authentication);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
