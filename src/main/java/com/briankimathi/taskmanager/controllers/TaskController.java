@@ -45,7 +45,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDto<Void>> deleteTask(@RequestParam Long id, Authentication authentication) {
+    public ResponseEntity<ResponseDto<Void>> deleteTask(@PathVariable Long id, Authentication authentication) {
         ResponseDto<Void> responseDto = taskService.deleteTask(id, authentication);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
